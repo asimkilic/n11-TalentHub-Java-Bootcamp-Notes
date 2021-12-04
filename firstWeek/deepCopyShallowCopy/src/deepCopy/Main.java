@@ -12,7 +12,6 @@ public class Main {
         home.setNetSquareMeter((BigDecimal.valueOf(125)));
         home.setCountOfRoom(5L);
         home.setArchitect(architect);
-
         Home cloneHome = null;
         try {
             cloneHome = (Home) home.clone();
