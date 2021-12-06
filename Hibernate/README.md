@@ -2,7 +2,7 @@
 
 Plain Old Java Object 
 
-Sade eski bir java nesnesidir. Java Class'larının en basit halidir.Başka bir sınıftan extend yada implemente olmamış ve constructor'ı oluşturulmamış en basit halidir.Private değişkenlere sahiptir. Ve bu değişkenlere erişimi getter ve setter'lar ile sağlanmıştır yani enkapsüle edilmiştir. 
+Sade eski bir java nesnesidir. Java Class'larının en basit halidir.Başka bir sınıftan extend yada implemente olmamış ve constructor'ı oluşturulmamış en basit halidir. Private değişkenlere sahiptir. Ve bu değişkenlere erişimi getter ve setter'lar ile sağlanmıştır yani enkapsüle edilmiştir. 
 
 Her entityde bir PK yani ID değişkeni olmalıdır.
 
@@ -211,3 +211,20 @@ public class Sehir{
 }
 ```
 
+
+
+## Powershell üzerinden Postgresql'e bağlanmak için
+
+```powershell
+PS C:\Users\ofn2nvu> psql -U postgres
+postgres=# \c N11_BOOTCAMP
+N11_BOOTCAMP=# select * from urun;
+```
+
+\c  <veritabanı adı >   (psql'e giriş yaptıktan sonra veritabanı seçme) 
+\connect <veritabanı adı>   (psql'e giriş yaptıktan sonra veritabanı seçme)   
+psql -d <veritabanı adı> -U <kullanıcı adı> -W  (belirtilen veri tabanına belirtilen kullanıcı ile bağlanır)
+\l (varolan dbleri listeler)
+\dt (tabloları listeler)
+\d+  <tablo adı>  (tablodaki kolonları ve detayları listeler (tipleri unique'ler vs.)
+\q  çıkış
