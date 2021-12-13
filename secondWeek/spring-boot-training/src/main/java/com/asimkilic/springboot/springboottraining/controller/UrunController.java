@@ -1,6 +1,9 @@
 package com.asimkilic.springboot.springboottraining.controller;
 
+import com.asimkilic.springboot.springboottraining.dto.UrunDetayDto;
+import com.asimkilic.springboot.springboottraining.entity.Kategori;
 import com.asimkilic.springboot.springboottraining.entity.Urun;
+import com.asimkilic.springboot.springboottraining.service.entityservice.KategoriEntityService;
 import com.asimkilic.springboot.springboottraining.service.entityservice.UrunEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,9 @@ public class UrunController {
 
     @Autowired
     private UrunEntityService urunEntityService;
+
+    @Autowired
+    private KategoriEntityService kategoriEntityService;
 
     @GetMapping("/merhaba")
     public String merhaba() {
@@ -31,7 +37,20 @@ public class UrunController {
     }
 
     @GetMapping("/urunler/dto/{id}")
-    public Urun findUrunDtoById(@PathVariable Long id) {
-        return urunEntityService.findById(id);
+    public UrunDetayDto findUrunDtoById(@PathVariable Long id) {
+        Urun urun = urunEntityService.findById(id);
+        UrunDetayDto urunDetayDto = convertUrunToUrunDetayDto(urun);
+        return urunDetayDto;
+    }
+
+    private UrunDetayDto convertUrunToUrunDetayDto(Urun urun) {
+
+        Kategori kategori = kategoriEntityService.findById(urun.getKategori().getId());
+        UrunDetayDto urunDetayDto = new UrunDetayDto();
+        urunDetayDto.setUrunAdi(urun.getAdi());
+        urunDetayDto.setUrunFiyati(urun.getFiyat());
+        urunDetayDto.setKategoriAdi(kategori.getAdi());
+
+        return urunDetayDto;
     }
 }
