@@ -280,7 +280,7 @@ public class AnnotationBasedApplication{
 
 Eğer context oluşuracağımız sınıfımızı **@ComponentScan** olarak işaretlersek, o sınfımıızın bulunduğu package'ı base-package olarak alır, xml içerisinde ayrıca base-package belirtmemize gerek kalmaz.  
 
-**@ComponentScan("<packagename>")** olarak da belirtebiliyoruz.
+**@ComponentScan("paket-adı")** olarak da belirtebiliyoruz.
 
 EntityService'lerimizi **@Service** olarak işaretleyebiliyoruz. @Service zaten @Component'den türemiştir. Veya repository classlarımızı **@Repository** olarak işareletleyebiliriz. 
 
