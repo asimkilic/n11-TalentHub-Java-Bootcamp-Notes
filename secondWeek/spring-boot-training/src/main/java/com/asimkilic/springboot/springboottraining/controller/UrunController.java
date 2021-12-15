@@ -7,14 +7,18 @@ import com.asimkilic.springboot.springboottraining.entity.Urun;
 import com.asimkilic.springboot.springboottraining.exception.UrunNotFoundException;
 import com.asimkilic.springboot.springboottraining.service.entityservice.KategoriEntityService;
 import com.asimkilic.springboot.springboottraining.service.entityservice.UrunEntityService;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,8 +33,14 @@ public class UrunController {
 
 
     @GetMapping("")
-    public List<Urun> findAllUrunList() {
-        return urunEntityService.findAll();
+    public MappingJacksonValue findAllUrunList() {
+        List<Urun> urunList = urunEntityService.findAll();
+            SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "adi", "fiyat");
+            SimpleFilterProvider filters = new SimpleFilterProvider().addFilter("UrunFilter", filter);
+            MappingJacksonValue mapping = new MappingJacksonValue(urunList);
+            mapping.setFilters(filters);
+
+        return mapping;
     }
 
     @GetMapping("/{id}")
@@ -45,7 +55,6 @@ public class UrunController {
         );
         EntityModel entityModel = EntityModel.of(urun);
         entityModel.add(linkToUrun.withRel("tum-urunler"));
-
 
 
         return entityModel;
