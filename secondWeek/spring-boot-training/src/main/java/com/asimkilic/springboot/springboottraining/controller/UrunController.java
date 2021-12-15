@@ -94,8 +94,6 @@ public class UrunController {
         Urun urun = urunEntityService.findById(id);
         UrunDetayDto urunDetayDto = UrunConverter.INSTANCE.convertUrunToUrunDetayDto(urun);
 
-
-        //UrunDetayDto urunDetayDto = convertUrunToUrunDetayDto(urun);
         return urunDetayDto;
     }
 
