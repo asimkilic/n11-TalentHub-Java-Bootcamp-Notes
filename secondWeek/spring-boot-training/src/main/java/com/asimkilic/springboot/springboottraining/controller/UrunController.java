@@ -62,7 +62,8 @@ public class UrunController {
 
     @PostMapping("")
     public ResponseEntity<Object> saveUrun(@RequestBody UrunDto urunDto) {
-        Urun urun = convertUrunDtoToUrun(urunDto);
+        Urun urun = UrunConverter.INSTANCE.convertUrunDtoToUrun(urunDto);
+       // Urun urun = convertUrunDtoToUrun(urunDto);
         urun = urunEntityService.save(urun);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("{id}").buildAndExpand(urun.getId()).toUri();
@@ -91,7 +92,10 @@ public class UrunController {
     @GetMapping("/dto/{id}")
     public UrunDetayDto findUrunDtoById(@PathVariable Long id) {
         Urun urun = urunEntityService.findById(id);
-        UrunDetayDto urunDetayDto = convertUrunToUrunDetayDto(urun);
+        UrunDetayDto urunDetayDto = UrunConverter.INSTANCE.convertUrunToUrunDetayDto(urun);
+
+
+        //UrunDetayDto urunDetayDto = convertUrunToUrunDetayDto(urun);
         return urunDetayDto;
     }
 
