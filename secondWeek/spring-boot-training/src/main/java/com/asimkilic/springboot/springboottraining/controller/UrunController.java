@@ -8,6 +8,8 @@ import com.asimkilic.springboot.springboottraining.exception.UrunNotFoundExcepti
 import com.asimkilic.springboot.springboottraining.service.entityservice.KategoriEntityService;
 import com.asimkilic.springboot.springboottraining.service.entityservice.UrunEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,8 +34,21 @@ public class UrunController {
     }
 
     @GetMapping("/{id}")
-    public Urun findUrunById(@PathVariable Long id) {
-        return urunEntityService.findById(id);
+    public EntityModel<Urun> findUrunById(@PathVariable Long id) {
+        Urun urun = urunEntityService.findById(id);
+        if (urun == null) {
+            throw new UrunNotFoundException("Urun not found. id: " + id);
+        }
+        WebMvcLinkBuilder linkToUrun = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(this.getClass())
+                        .findAllUrunList()
+        );
+        EntityModel entityModel = EntityModel.of(urun);
+        entityModel.add(linkToUrun.withRel("tum-urunler"));
+
+
+
+        return entityModel;
     }
 
     @PostMapping("")
@@ -58,9 +73,10 @@ public class UrunController {
     @DeleteMapping("{id}")
     public void deleteUrun(@PathVariable Long id) {
         Urun urun = urunEntityService.findById(id);
-        if(urun == null){
-            throw new UrunNotFoundException("Urun not found. id: "+ id);
+        if (urun == null) {
+            throw new UrunNotFoundException("Urun not found. id: " + id);
         }
+        urunEntityService.deleteById(id);
     }
 
     @GetMapping("/dto/{id}")
