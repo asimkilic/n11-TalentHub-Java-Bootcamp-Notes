@@ -1,5 +1,6 @@
 package com.asimkilic.springboot.springboottraining.controller;
 
+import com.asimkilic.springboot.springboottraining.converter.UrunConverter;
 import com.asimkilic.springboot.springboottraining.dto.UrunDetayDto;
 import com.asimkilic.springboot.springboottraining.dto.UrunDto;
 import com.asimkilic.springboot.springboottraining.entity.Kategori;
@@ -18,11 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/urunler/")
+@RequestMapping("/api/urunler")
 public class UrunController {
 
     @Autowired
@@ -35,16 +35,17 @@ public class UrunController {
     @GetMapping("")
     public MappingJacksonValue findAllUrunList() {
         List<Urun> urunList = urunEntityService.findAll();
-            SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "adi", "fiyat");
-            SimpleFilterProvider filters = new SimpleFilterProvider().addFilter("UrunFilter", filter);
-            MappingJacksonValue mapping = new MappingJacksonValue(urunList);
-            mapping.setFilters(filters);
+        String filterName = "UrunFilter";
+        SimpleBeanPropertyFilter filter = getUrunFilter();
+        SimpleFilterProvider filters = new SimpleFilterProvider().addFilter(filterName, filter);
+        MappingJacksonValue mapping = new MappingJacksonValue(urunList);
+        mapping.setFilters(filters);
 
         return mapping;
     }
 
     @GetMapping("/{id}")
-    public EntityModel<Urun> findUrunById(@PathVariable Long id) {
+    public MappingJacksonValue findUrunById(@PathVariable Long id) {
         Urun urun = urunEntityService.findById(id);
         if (urun == null) {
             throw new UrunNotFoundException("Urun not found. id: " + id);
@@ -53,32 +54,32 @@ public class UrunController {
                 WebMvcLinkBuilder.methodOn(this.getClass())
                         .findAllUrunList()
         );
-        EntityModel entityModel = EntityModel.of(urun);
+        UrunDto urunDto = UrunConverter.INSTANCE.convertUrunToUrunDto(urun);
+        String filterName = "UrunDtoFilter";
+
+        SimpleFilterProvider filters = getUrunFilterProvider(filterName);
+
+
+        EntityModel entityModel = EntityModel.of(urunDto);
         entityModel.add(linkToUrun.withRel("tum-urunler"));
 
+        MappingJacksonValue mapping = new MappingJacksonValue(entityModel);
+        mapping.setFilters(filters);
 
-        return entityModel;
+        return mapping;
     }
+
 
     @PostMapping("")
     public ResponseEntity<Object> saveUrun(@RequestBody UrunDto urunDto) {
         Urun urun = UrunConverter.INSTANCE.convertUrunDtoToUrun(urunDto);
-       // Urun urun = convertUrunDtoToUrun(urunDto);
+        // Urun urun = convertUrunDtoToUrun(urunDto);
         urun = urunEntityService.save(urun);
         URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("{id}").buildAndExpand(urun.getId()).toUri();
+                .fromCurrentRequest().path("/{id}").buildAndExpand(urun.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    private Urun convertUrunDtoToUrun(UrunDto urunDto) {
-        Kategori kategori = kategoriEntityService.findById(urunDto.getKategoriId());
-        Urun urun = new Urun();
-        urun.setAdi(urunDto.getAdi());
-        urun.setFiyat(urunDto.getFiyat());
-        urun.setKayitTarihi(urunDto.getKayitTarihi());
-        urun.setKategori(kategori);
-        return urun;
-    }
 
     @DeleteMapping("{id}")
     public void deleteUrun(@PathVariable Long id) {
@@ -89,22 +90,26 @@ public class UrunController {
         urunEntityService.deleteById(id);
     }
 
-    @GetMapping("/dto/{id}")
+    @GetMapping("/detail/{id}")
     public UrunDetayDto findUrunDtoById(@PathVariable Long id) {
         Urun urun = urunEntityService.findById(id);
+        if (urun == null) {
+            throw new UrunNotFoundException("Urun not found. id: " + id);
+        }
         UrunDetayDto urunDetayDto = UrunConverter.INSTANCE.convertUrunToUrunDetayDto(urun);
 
         return urunDetayDto;
     }
 
-    private UrunDetayDto convertUrunToUrunDetayDto(Urun urun) {
-
-        Kategori kategori = kategoriEntityService.findById(urun.getKategori().getId());
-        UrunDetayDto urunDetayDto = new UrunDetayDto();
-        urunDetayDto.setUrunAdi(urun.getAdi());
-        urunDetayDto.setUrunFiyati(urun.getFiyat());
-        urunDetayDto.setKategoriAdi(kategori.getAdi());
-
-        return urunDetayDto;
+    private SimpleFilterProvider getUrunFilterProvider(String filterName) {
+        SimpleBeanPropertyFilter filter = getUrunFilter();
+        SimpleFilterProvider filters = new SimpleFilterProvider().addFilter(filterName, filter);
+        return filters;
     }
+
+    private SimpleBeanPropertyFilter getUrunFilter() {
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "adi", "fiyat", "kayitTarihi");
+        return filter;
+    }
+
 }

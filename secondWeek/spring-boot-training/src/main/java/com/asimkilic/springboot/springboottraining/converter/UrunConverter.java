@@ -1,4 +1,4 @@
-package com.asimkilic.springboot.springboottraining.controller;
+package com.asimkilic.springboot.springboottraining.converter;
 
 import com.asimkilic.springboot.springboottraining.dto.UrunDetayDto;
 import com.asimkilic.springboot.springboottraining.dto.UrunDto;
@@ -17,10 +17,14 @@ public interface UrunConverter {
     @Mapping(source = "kategoriId", target = "kategori.id")
     Urun convertUrunDtoToUrun(UrunDto urunDto);
 
+    @Mapping(source="kategori.id",target = "kategoriId")
+    UrunDto convertUrunToUrunDto(Urun urun);
+
     @Mapping(source="fiyat",target="urunFiyati")
     @Mapping(source="adi",target="urunAdi ")
     @Mapping(source="kategori.adi",target="kategoriAdi")
     UrunDetayDto convertUrunToUrunDetayDto(Urun urun);
+
 
 
 }

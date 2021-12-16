@@ -1,11 +1,13 @@
 package com.asimkilic.springboot.springboottraining.dto;
 
 import com.asimkilic.springboot.springboottraining.entity.Kategori;
+import com.fasterxml.jackson.annotation.JsonFilter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@JsonFilter("UrunDtoFilter")
 public class UrunDto {
 
     private Long id;
