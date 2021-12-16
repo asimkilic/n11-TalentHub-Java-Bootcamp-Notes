@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UrunConverter {
 
@@ -25,6 +27,10 @@ public interface UrunConverter {
     @Mapping(source="kategori.adi",target="kategoriAdi")
     UrunDetayDto convertUrunToUrunDetayDto(Urun urun);
 
+    @Mapping(source="fiyat",target="urunFiyati")
+    @Mapping(source="adi",target="urunAdi ")
+    @Mapping(source="kategori.adi",target="kategoriAdi")
+    List<UrunDetayDto> convertAllUrunListToUrunDetayDtoList(List<Urun> urunList);
 
 
 }

@@ -32,13 +32,28 @@ public class KategoriEntityService {
         kategori = kategoriDao.save(kategori);
         return kategori;
     }
-    public void delete(Kategori kategori){
+
+    public void delete(Kategori kategori) {
         kategoriDao.delete(kategori);
     }
-    public void deleteById(Long id){
+
+    public void deleteById(Long id) {
         kategoriDao.deleteById(id);
     }
-    public long count(){
-       return kategoriDao.count();
+
+    public long count() {
+        return kategoriDao.count();
+    }
+
+    public List<Kategori> findAllByUstKategoriIsNullOrderByAdi() {
+        return kategoriDao.findAllByUstKategoriIsNullOrderByAdi();
+    }
+
+    public List<Kategori> findAllByUstKategoriIsTwo() {
+        return kategoriDao.findAllByUstKategoriIsTwo();
+    }
+
+    public List<Kategori> findByAdiEndsWith(String adi) {
+        return kategoriDao.findByAdiEndsWith(adi);
     }
 }

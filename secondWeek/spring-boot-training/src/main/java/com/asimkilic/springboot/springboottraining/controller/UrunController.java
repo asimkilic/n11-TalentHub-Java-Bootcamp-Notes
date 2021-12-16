@@ -22,7 +22,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/urunler")
+@RequestMapping("/api/urunler/")
 public class UrunController {
 
     @Autowired
@@ -76,7 +76,7 @@ public class UrunController {
         // Urun urun = convertUrunDtoToUrun(urunDto);
         urun = urunEntityService.save(urun);
         URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}").buildAndExpand(urun.getId()).toUri();
+                .fromCurrentRequest().path("{id}").buildAndExpand(urun.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
@@ -99,6 +99,14 @@ public class UrunController {
         UrunDetayDto urunDetayDto = UrunConverter.INSTANCE.convertUrunToUrunDetayDto(urun);
 
         return urunDetayDto;
+    }
+    @GetMapping("kategoriler/{kategoriId}")
+    public List<UrunDetayDto> findAllUrunByKategoriId(@PathVariable Long kategoriId){
+        List<Urun> urunList = urunEntityService.findAllByKategori_IdOrderByIdDesc(kategoriId);
+        List<UrunDetayDto> urunDetayDtoList = UrunConverter.INSTANCE.convertAllUrunListToUrunDetayDtoList(urunList);
+        return urunDetayDtoList;
+
+
     }
 
     private SimpleFilterProvider getUrunFilterProvider(String filterName) {

@@ -39,10 +39,14 @@ public class SpringBootTrainingApplication {
             urunEntityService.deleteById(urunId);
         }
 
-       */
+
         List<Urun> urunList = urunEntityService.findAll();
         for (Urun urun : urunList) {
             System.out.println(urun.getAdi());
+        } */
+        List<Kategori> kategoriList = kategoriEntityService.findByAdiEndsWith("r");
+        for (Kategori kategori : kategoriList) {
+            System.out.println(kategori.getAdi());
         }
     }
 

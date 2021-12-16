@@ -1,9 +1,13 @@
 package com.asimkilic.springboot.springboottraining.controller;
 
 import com.asimkilic.springboot.springboottraining.converter.KategoriConverter;
+import com.asimkilic.springboot.springboottraining.converter.UrunConverter;
 import com.asimkilic.springboot.springboottraining.dto.KategoriDto;
+import com.asimkilic.springboot.springboottraining.dto.UrunDetayDto;
 import com.asimkilic.springboot.springboottraining.entity.Kategori;
+import com.asimkilic.springboot.springboottraining.entity.Urun;
 import com.asimkilic.springboot.springboottraining.service.entityservice.KategoriEntityService;
+import com.asimkilic.springboot.springboottraining.service.entityservice.UrunEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,9 @@ import java.util.List;
 public class KategoriController {
     @Autowired
     private KategoriEntityService kategoriEntityService;
+
+    @Autowired
+    private UrunEntityService urunEntityService;
 
     @GetMapping
     public List<KategoriDto> findAll() {
@@ -68,6 +75,14 @@ public class KategoriController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         kategoriEntityService.deleteById(id);
+    }
+
+    //localhost:8080/api/kategoriler/{id}/urunler
+    @GetMapping("/{id}/urunler")
+    public List<UrunDetayDto> findAllUrunByKategori(@PathVariable Long id) {
+        List<Urun> urunList = urunEntityService.findAllByKategori_IdOrderByIdDesc(id);
+        List<UrunDetayDto> urunDetayDtoList = UrunConverter.INSTANCE.convertAllUrunListToUrunDetayDtoList(urunList);
+        return urunDetayDtoList;
     }
 
 }

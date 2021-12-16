@@ -18,6 +18,7 @@ public class UrunEntityService {
     public List<Urun> findAll() {
         return (List<Urun>) urunDao.findAll();
     }
+
     public Urun findById(Long id) {
         Optional<Urun> optionalUrun = urunDao.findById(id);
         Urun urun = null;
@@ -31,13 +32,20 @@ public class UrunEntityService {
         urun = urunDao.save(urun);
         return urun;
     }
-    public void delete(Urun urun){
+
+    public void delete(Urun urun) {
         urunDao.delete(urun);
     }
-    public void deleteById(Long id){
+
+    public void deleteById(Long id) {
         urunDao.deleteById(id);
     }
-    public long count(){
+
+    public long count() {
         return urunDao.count();
+    }
+
+    public List<Urun> findAllByKategori_IdOrderByIdDesc(Long id) {
+        return urunDao.findAllByKategori_IdOrderByIdDesc(id);
     }
 }

@@ -425,3 +425,112 @@ public UrunDetayDto findUrunDtoById(@PathVariable Long id) {
     return urunDetayDto;
 }
 ```
+
+*CrudRepository* *Repository*'den extend olan bir interface.
+
+**PagingAndSortingRepository** 'de  *CrudRepository*'den extend oluyor.
+
+- Iterable< T > findAll(Sort sort);
+- Page< T > findAll(Pageable pageable);
+
+metodlarına sahip.
+
+**JpaRepository** ise hem *PagingAndSortingRepository*'den hemde *QueryByExampleExecutor*'dan extend oluyor, ikisinin yaptığı herşeyi yapıyor ekstradan findAll, findAllById, saveAndFlush, flush gibi metodları barındırıyor.
+
+*KategoriDao'da metodumuzu tanımlıyoruz*
+
+```java
+
+@Repository
+public interface KategoriDao extends JpaRepository<Kategori,Long> {
+    
+    List<Kategori> findAllByUstKategoriIsNull();
+}
+
+```
+
+*KategoriEntityService'de de metodumuzu  yazıyoruz*
+
+```java
+public List<Kategori> findAllByUstKategoriIsNull(){
+    return kategoriDao.findAllByUstKategoriIsNull();
+}
+```
+
+*En son SpringBootTrainingApplication class'ımızda verileri ekrana yazdırıyoruz*
+
+```java
+List<Kategori> kategoriList = kategoriEntityService.findAllByUstKategoriIsNull();
+for (Kategori kategori : kategoriList) {
+    System.out.println(kategori.getAdi());
+}
+```
+
+*Bu metodumuz bize üst kategorisi null olanları getirecek, eğer veritabanından üst kategorisi null olanlara bakacak olursak ;*
+
+```powershell
+Şu anda "postgres" veritabanına "postgres" kullanıcısı ile bağlısınız.
+postgres=# select * from kategori where id_ust_kategori is null;
+ id |    adi     | kirilim | id_ust_kategori
+----+------------+---------+-----------------
+  1 | Moda       |       1 |
+  2 | Elektronik |       1 |
+  3 | Ev & Yaşam |       1 |
+(3 satır)
+
+
+postgres=#
+```
+
+*Java çıktımız ise;*
+
+```java
+Hibernate: select kategori0_.id as id1_0_, kategori0_.adi as adi2_0_, kategori0_.kirilim as kirilim3_0_, kategori0_.id_ust_kategori as id_ust_k4_0_ from kategori kategori0_ where kategori0_.id_ust_kategori is null
+Moda
+Elektronik
+Ev & Yaşam
+
+```
+
+*Query anotasyonu ile özelleştirilmiş sorgularda yazabiliriz*
+
+```java
+    @Query("select kategori from Kategori kategori where kategori.ustKategori.id=2")
+    List<Kategori> findAllByUstKategoriIsTwo();
+```
+
+*Entity içerisinde Entity sorguları için*
+
+**Dao**
+
+```java
+
+public interface UrunDao extends JpaRepository<Urun, Long> {
+    List<Urun> findAllByKategori_IdOrderByIdDesc(Long kategoriId);
+}
+
+```
+
+**Service**
+
+```java
+ public List<Urun> findAllByKategori_IdOrderByIdDesc(Long id) {
+        return urunDao.findAllByKategori_IdOrderByIdDesc(id);
+    }
+```
+
+**Controller**
+
+```java
+    @GetMapping("kategoriler/{kategoriId}")
+    public List<UrunDetayDto> findAllUrunByKategoriId(@PathVariable Long kategoriId){
+        List<Urun> urunList = urunEntityService.findAllByKategori_IdOrderByIdDesc(kategoriId);
+        
+        List<UrunDetayDto> urunDetayDtoList = UrunConverter.INSTANCE.convertAllUrunListToUrunDetayDtoList(urunList);
+        return urunDetayDtoList;
+
+    }
+```
+
+
+
