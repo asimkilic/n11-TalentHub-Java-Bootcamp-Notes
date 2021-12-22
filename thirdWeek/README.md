@@ -193,13 +193,13 @@ db.category.update({id:9},{$set:{name:"Seehpa"}})
 Projemiz içerisinde **mongodb** adında bir *package* oluşturalım işlemlerimizi burada yapalım.
 *mongodb* package içerisine *controller, entity, service,entityservice(service içine) ve repository* packagelerimizi oluşturalım. Yapımız bu şekilde olacaktır;
 
-```json
-			-mongodb
-                 |__ controller
-                 |__ entity
-                 |__ repository
-                 |__ service
-			              |__ entityservice
+```powershell
+-mongodb
+   |__ controller
+   |__ entity
+   |__ repository
+   |__ service
+            |__ entityservice
 ```
 
 
