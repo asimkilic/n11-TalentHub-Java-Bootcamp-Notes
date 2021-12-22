@@ -9,7 +9,7 @@ Birbiri ile ilişkili işlemlerde transaction'ları kullanırız.
 - **Isolation**: İzole etmek demektir. Aynı anda birden fazla transaction tarafından güncelleme yapılmamalı.
 - **Durability**: Dayanıklı, kalıcı demektir. Transaction sonlandığında tüm işlemler kalıcı hale gelmelidir. Eğer bir hata olduysa da tüm güncellemeler iptal edilip, birebir eski haline dönmelidir.
 
-## Programmatic Tramsaction
+## Programmatic Transaction
 
 Transaction işleminin başlatlıp sonlandırılması ve açık kalan bağlantıların kapatılması kodlarını içinde barındıran bir yöntemdir.
 
@@ -192,12 +192,17 @@ db.category.update({id:9},{$set:{name:"Seehpa"}})
 
 Projemiz içerisinde **mongodb** adında bir *package* oluşturalım işlemlerimizi burada yapalım.
 *mongodb* package içerisine *controller, entity, service,entityservice(service içine) ve repository* packagelerimizi oluşturalım. Yapımız bu şekilde olacaktır;
--mongodb
+
+```json
+			-mongodb
                  |__ controller
                  |__ entity
                  |__ repository
                  |__ service
-			                 |__ entityservice
+			              |__ entityservice
+```
+
+
 
 entity package'imizin içerisine **Category** class'ımızı oluşturalım. Class'ımızı **@Document** olarak işaretliyoruz ve içerisine parametre olarak veritabanımızda Collection olarak verdiğimiz ismi giriyoruz. Field'ları oluşturdukdan sonra getter ve setter'larıda ekliyoruz.
 
