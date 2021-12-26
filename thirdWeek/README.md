@@ -105,7 +105,7 @@ n11
 admin   0.000GB
 config  0.000GB
 local   0.000GB
->
+>db.createCollection('product')
 ```
 
 n11 içerisine herhangi bir *Collection* eklediğimiz zaman veritabanı görünür olacak.
