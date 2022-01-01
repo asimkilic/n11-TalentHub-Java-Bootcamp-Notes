@@ -1,5 +1,7 @@
-package com.asimkilic.springboot.springboottraining.jwt.security;
+package com.asimkilic.springboot.springboottraining.jwt.config;
 
+import com.asimkilic.springboot.springboottraining.jwt.security.JwtAuthenticationEntryPoint;
+import com.asimkilic.springboot.springboottraining.jwt.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -67,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
+      /*    authenticationManagerBuilder.parentAuthenticationManager(authenticationManagerBean()).userDetailsService(userDetailsService); */
+      authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
@@ -82,7 +86,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/auth/**").permitAll()
+                .authorizeRequests()
+                .antMatchers(
+                        "/auth/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "v3/api-docs/**"
+
+                )
+                .permitAll()
                 .anyRequest().authenticated();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
