@@ -26,3 +26,15 @@ Bytecodelar JVM'in komutlarıdır. Bir byte uzunluğunda oldukları için böyle
 - Genel olarak C/C++ ve Java ile yazılır.
 
 **Java platform**
+
+
+
+
+
+**Polymorphism**, çok çeşitlilik demektir. Çok şekilli olan referanslardır. bir referansın, zamanın farklı anlarındai kendi yada alt tipinden olan nesneleri gösterebilmesine denir. Polymorphism bir yaklaşımdır, upcasting ise onu gerçekleştiren mekanizmadır.
+**Abstraction**, Soyut sınıflardan somut sınıflar oluşturulmasıdır.
+**Heap ve Stack**, Stack static yer tahsisi için kullanılırken, heap dinamik yer tahsisi için kullanılır. Stack'eki veri hemen silinirken, heap'deki verinin silinmesi GC' ye bağlıdır.
+**Veri Yapıları**
+
+- **ArrayList** Verileri saklamak için dinamik bir array kullanır. Array kullandığı için yavaştır. Eğer bir elemanı silinirse hepsi birer kayar. Sadece list gibi davranabilir çünk sadece List interface'ini implemente ediyor. Verilere ulaşma açısından iyidir.
+- **Linked List** birbirine bağlı doğrusal bir dizi öğeden oluşan sıralı bir yapıdır. Liked list verileri saklamak için doubly linked list kullanır. ArrayList'ten daha hızlıdır çünkü doubly list kullanır. Bir eleman silindiğinde kaydırma durumu yoktur. Hem bir list hem de queue gibi davranabilir çünkü list ve Deque interface'lerini implemente eder. Veriyi işleme açısından iyidir.
