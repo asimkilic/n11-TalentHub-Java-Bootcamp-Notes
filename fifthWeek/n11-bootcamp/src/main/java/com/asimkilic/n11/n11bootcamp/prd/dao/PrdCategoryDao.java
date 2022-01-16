@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PrdCategoryDao extends JpaRepository<PrdCategory, Long> {
-    List<PrdCategory> findAllBySuperCategoryId(Long superCategoryId);
+    List<PrdCategory> findAllBySuperCategoryIdOrderById(Long superCategoryId);
+
 }

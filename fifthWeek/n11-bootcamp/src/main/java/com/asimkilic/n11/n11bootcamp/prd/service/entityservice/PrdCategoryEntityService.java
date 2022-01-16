@@ -19,7 +19,8 @@ public class PrdCategoryEntityService extends BaseEntityService<PrdCategory, Prd
     }
 
     public List<PrdCategory> findBySuperCategoryId(Long superCategoryId){
-        return getDao().findAllBySuperCategoryId(superCategoryId);
+        return getDao().findAllBySuperCategoryIdOrderById(superCategoryId);
 
     }
+
 }

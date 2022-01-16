@@ -1,18 +1,38 @@
 package com.asimkilic.n11.n11bootcamp.prd.converter;
 
-import com.asimkilic.n11.n11bootcamp.prd.dto.PrdCategorySaveRequestDto;
+import com.asimkilic.n11.n11bootcamp.prd.dto.PrdCategoryForMenuDto;
 import com.asimkilic.n11.n11bootcamp.prd.entity.PrdCategory;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import com.asimkilic.n11.n11bootcamp.prd.service.entityservice.PrdCategoryEntityService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface PrdCategoryConverter {
+import java.util.ArrayList;
+import java.util.List;
 
-    PrdCategoryConverter INSTANCE = Mappers.getMapper(PrdCategoryConverter.class);
+import static com.asimkilic.n11.n11bootcamp.prd.converter.PrdCategorMapper.INSTANCE;
 
-    PrdCategorySaveRequestDto convertToPrdCategorySaveRequestDto(PrdCategory prdCategory);
+@Service
+@RequiredArgsConstructor
+public class PrdCategoryConverter {
+    private final PrdCategoryEntityService prdCategoryEntityService;
+    public PrdCategoryForMenuDto convertToPrdCategoryForMenuDto(PrdCategory prdCategory){
+        PrdCategoryForMenuDto prdCategoryForMenuDto = INSTANCE.convertToPrdCategoryForMenuDto(prdCategory);
+        List<PrdCategory> subPrdCategoryList = prdCategoryEntityService.findBySuperCategoryId(prdCategory.getId());
 
-    PrdCategory convertToPrdCategory(PrdCategorySaveRequestDto prdCategorySaveRequestDto);
+        List<PrdCategoryForMenuDto> subCategoryForMenuDtoList = convertToPrdCategoryForMenuDtoList(subPrdCategoryList);
 
+        prdCategoryForMenuDto.setSubPrdCategoryForMenuDtoList(subCategoryForMenuDtoList);
+        return prdCategoryForMenuDto;
+
+    }
+    public List<PrdCategoryForMenuDto> convertToPrdCategoryForMenuDtoList(List<PrdCategory> prdCategoryList){
+        List<PrdCategoryForMenuDto> prdCategoryForMenuDtoList = new ArrayList<>();
+        for (PrdCategory prdCategory : prdCategoryList) {
+
+            PrdCategoryForMenuDto prdCategoryForMenuDto = convertToPrdCategoryForMenuDto(prdCategory);
+            prdCategoryForMenuDtoList.add(prdCategoryForMenuDto);
+
+        }
+        return prdCategoryForMenuDtoList;
+    }
 }

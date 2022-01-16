@@ -10,7 +10,7 @@ class CategoryMenus extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8080/api/v1/categories")
+    fetch("http://localhost:8080/api/v1/categories/menu")
       .then((response) => response.json())
       .then((categoryList) => {
         this.setState({ categoryList: categoryList });
@@ -18,6 +18,7 @@ class CategoryMenus extends React.Component {
   }
 
   render() {
+    console.log(this.state.categoryList)
     return (
         <CategoryMenu categoryList={this.state.categoryList} />
     );
