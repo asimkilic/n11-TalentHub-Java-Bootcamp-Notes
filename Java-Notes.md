@@ -27,14 +27,81 @@ Bytecodelar JVM'in komutlarıdır. Bir byte uzunluğunda oldukları için böyle
 
 **Java platform**
 
+JVM'i, geliştiriciye bakan yüzü standart olan ama platforma bakan yüzü, onunla konuşabilecek şekilde, geliştiriciyi platformdan soyutlayan bir ara katman olarak düşünebiliriz.
+
+Java'da kaynak kodu (source code) derlemek (compile) için, Java derleyicisi (Japa compiler) kullanılır.
+Java derleyicisi **javac** komutu ile çalıştırılır.
+Java derleyicisi *java* uzantılı kaynak kodundan *class* uzantılı derlenmiş bytecode üretir.
+
+```powershell
+javac MyFirstApp.java
+```
+
+Java'da ancak içinde main metot olan sınıflar çalıştırılabilirdir (executable,runnable).Dolayısıyla komut satırınca *java* komutuyla JVM'i ayağa kaldırıp ona MyFirstApp'i geçeceğiz.
+
+```powershell
+java MyFirstApp
+```
+
+Eğer **javac** ile derlerken yada **java** ile çalıştırırken **Error: Could not find or load class XXX** vb. bir hata alıyorsak, bu classpath problemidir.
+
+```powershell
+>javac -classpath . MyFirstApp.java
+>java -classpath . MyFirstApp
+```
+
+**Bytecode**
+
+**javap**, JDK ile birlikte gelen ve *class* dosyasının içeriğini, bytecodelarını gösteren bir araçtır.
+
+```powershell
+>javap -c SelamTest.class
+```
 
 
 
+![image-20220202112516384](C:\Users\ofn2nvu\AppData\Roaming\Typora\typora-user-images\image-20220202112516384.png)
 
-**Polymorphism**, çok çeşitlilik demektir. Çok şekilli olan referanslardır. bir referansın, zamanın farklı anlarındai kendi yada alt tipinden olan nesneleri gösterebilmesine denir. Polymorphism bir yaklaşımdır, upcasting ise onu gerçekleştiren mekanizmadır.
-**Abstraction**, Soyut sınıflardan somut sınıflar oluşturulmasıdır.
-**Heap ve Stack**, Stack static yer tahsisi için kullanılırken, heap dinamik yer tahsisi için kullanılır. Stack'eki veri hemen silinirken, heap'deki verinin silinmesi GC' ye bağlıdır.
-**Veri Yapıları**
+**Java'nın tipleri**
 
-- **ArrayList** Verileri saklamak için dinamik bir array kullanır. Array kullandığı için yavaştır. Eğer bir elemanı silinirse hepsi birer kayar. Sadece list gibi davranabilir çünk sadece List interface'ini implemente ediyor. Verilere ulaşma açısından iyidir.
-- **Linked List** birbirine bağlı doğrusal bir dizi öğeden oluşan sıralı bir yapıdır. Liked list verileri saklamak için doubly linked list kullanır. ArrayList'ten daha hızlıdır çünkü doubly list kullanır. Bir eleman silindiğinde kaydırma durumu yoktur. Hem bir list hem de queue gibi davranabilir çünkü list ve Deque interface'lerini implemente eder. Veriyi işleme açısından iyidir.
+Java'nın 3 farklı  tür uygulamaya yönelik 3 farklı paketi vardır:
+
+- **Standart Java (Standar Edition,SE)**, çekirdek dildir.
+- **Mikro Java (Micro Edition, ME)**, gömülü ve mobil ortamlar içindir.
+- **Kurumsal Java (Enterprise Edition, EE)** kurumsal uygulamalar içindir.
+
+![image-20220202113102067](C:\Users\ofn2nvu\AppData\Roaming\Typora\typora-user-images\image-20220202113102067.png)
+
+***goto*** ve ***const*** dilde kullanılmamaktadır, bir anlamları yoktur ama en başından bu yana ayrılmış (reserved) kelimelerdir.
+
+Java'da isimler "sadece harf ile başlayabilir" kuralının iki istisnası vardır:
+İsimler $ € ₺ gibi para birimi sembolleri ile de başlayabilir.
+İsimler _ (alt çizgi) ile de başlayabilir.
+
+"$", Java tarafından otomatik olarak üretilen isimlerin başında kullanıldığından, kaçınılmasında fayda vardır.
+
+**Public** sınıf, kendi ismini taşıyan bir dosyada yer almak zorundadır. Yani her kaynak kodu dosyasında en fazla bir tane **public** sınıf olabilir.
+
+Java'da değişkenler, ilkel olsun referans olsun, fonksiyonellik ya da rol açısından üçe ayrılırlar:
+
+- **Nesne değişkenleri (instance** yada **object variables**): Nesnenin durumunu (state) oluşturan değişkenlerdir.
+- **Sınıf değişkenleri(class variable)**: Nesnelerin ortak durumunu ifade eden değişkenlerdir.
+- **Yerel değişkenler (local variables**): Geçici değişkenlerdir.
+
+**Abstact Data Types**
+
+ADT,  bir veri yapısının modeli olarak çağırılabilir.
+Interface'ler ADT'dir.
+ADT'ler tamamen implementasyonu olmayan yapılardır. Fonksiyonların gövdesi olmaz. 
+Son kullanıcı sadece metodları bilir. 
+
+**Data Structure**
+
+Asıl implementasyonlara veri yapıları diyoruz. 
+
+ADT								 Data Type
+Stack						  	 Array,Linked List
+Queue						 	 Array,Linked List
+Priority Queue 				Heap
+Dictionary / Hashmap	Array
+
